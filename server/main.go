@@ -21,19 +21,9 @@ func Main() {
 
 	// init logging
 	log.LogTo(opts.logto, opts.loglevel)
-	log.Info("port:%s",opts.port)
-	log.Info("logto:%s",opts.logto)
-	log.Info("loglevel:%s",opts.loglevel)
-
-	fmt.Println("port:",opts.port)
-	fmt.Println("logto:",opts.logto)
-	fmt.Println("loglevel:",opts.loglevel)
 
 	db = leveldb.NewDB(opts.DBPath)
-	err :=db.Set("test",[]byte("你好，世界。"))
-	if err !=nil{
-		fmt.Println("err:",err)
-	}
+
 	value ,_:=db.Get("test")
 	fmt.Println(string(value[:]))
 	typ,_ :=db.State("type")
@@ -63,15 +53,17 @@ func process(conn net.Conn){
 		op,err := reader.ReadByte()
 		if err !=nil {
 			if err!=io.EOF{
-				log.Info("process close:%v",err)
+				log.Info("client %s is error:%v",conn.RemoteAddr().String(),err)
+			}else if err == io.EOF{
+				log.Info("client %s is close",conn.RemoteAddr().String())
 			}
+
 			return
 		}
 		server :=Server{}
 		if op =='S'{
 			server.set(conn,reader)
 		}else if op=='G'{
-
 			server.get(conn,reader)
 		}else{
 			log.Info("close connection due to invalid operation:%v",op)

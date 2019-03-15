@@ -13,11 +13,11 @@ type Server struct{
 }
 
 func (s *Server) readKey(r *bufio.Reader) (string,error){
-	klen ,err := util.ReadLen(r)
+	kLen ,err := util.ReadLen(r)
 	if err !=nil{
 		return "",err
 	}
-	k :=make([]byte,klen)
+	k :=make([]byte,kLen)
 	_,err= io.ReadFull(r,k)
 	if err !=nil{
 		return "",err
@@ -26,20 +26,20 @@ func (s *Server) readKey(r *bufio.Reader) (string,error){
 }
 
 func (s *Server) readAll(r *bufio.Reader) (string, []byte,error){
-	klen, err := util.ReadLen(r)
+	kLen, err := util.ReadLen(r)
 	if err!=nil{
 		return "",nil,err
 	}
-	vlen ,err:= util.ReadLen(r)
+	vLen ,err:= util.ReadLen(r)
 	if err!=nil{
 		return "",nil,err
 	}
-	key :=make([]byte,klen)
+	key :=make([]byte,kLen)
 	_,err = io.ReadFull(r,key)
 	if err!=nil{
 		return "",nil,err
 	}
-	value := make([]byte,vlen)
+	value := make([]byte,vLen)
 	_,err = io.ReadFull(r,value)
 	if err!=nil{
 		return "",nil,err
@@ -52,8 +52,8 @@ func (s *Server) get(conn net.Conn, r *bufio.Reader) error{
 	if err !=nil{
 		return err
 	}
-	log.Info("get key=%s",key)
 	value,err:=db.Get(key)
+	log.Info("get key=%s,value=%s",key,string(value[:]))
 	return util.SendData(value,nil,conn)
 }
 
@@ -62,7 +62,17 @@ func (s *Server) set(conn net.Conn, r *bufio.Reader) error{
 	if err !=nil{
 		return err
 	}
-	log.Info("get key=%s",key)
+	log.Info("set key=%s,value=%s",key,string(value[:]))
 	err=db.Set(key,value)
-	return util.SendData(value,err,conn)
+	return util.SendData([]byte(key),err,conn)
+}
+
+func (s *Server) del(conn net.Conn, r*bufio.Reader) error{
+	key,err := s.readKey(r)
+	if err !=nil{
+		return err
+	}
+	log.Info("set key=%s",key)
+	err = db.Del(key)
+	return util.SendData([]byte(key),err,conn)
 }

@@ -27,7 +27,7 @@ func SendData(value []byte, err error, conn net.Conn) error {
 		_, e := conn.Write([]byte(tmp))
 		return e
 	}
-	vlen := fmt.Sprintf("%d ", len(value))
-	_, e := conn.Write(append([]byte(vlen), value...))
+	vLen := fmt.Sprintf("%d ", len(value))
+	_, e := conn.Write(append([]byte(vLen), value...))
 	return e
 }

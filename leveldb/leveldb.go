@@ -28,20 +28,6 @@ func NewDB(dbPath string) *LevelDB {
 	}
 	return &LevelDB{dbInstance}
 }
-//
-//func init() {
-//	//CompactionTableSize
-//	opt := new(opt2.Options)
-//	opt.CompactionTableSize = 4 * MiB
-//	opt.IteratorSamplingRate = 2 * MiB
-//	opt.WriteBuffer = 32 * MiB
-//
-//	dbInstance, err := _leveldb.OpenFile("/data/storage/leveldb", opt)
-//	if err != nil {
-//		panic(err)
-//	}
-//	_db = dbInstance
-//}
 
 func (db *LevelDB) Set(key string, value []byte) error {
 	return db.DB.Put([]byte(key), []byte(value), nil)
