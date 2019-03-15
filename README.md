@@ -1,5 +1,5 @@
 # TaoDB
-Asynchronous server and client for goleveldb
+This is server and client of goleveldb
 ## Dependencies
 
 ### Install goleveldb
