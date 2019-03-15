@@ -21,7 +21,7 @@ This is server and client of goleveldb
 	cd taodb/main/client
 	go build
 	./client -ip=127.0.0.1 -port=:7398
-### Starting the client(example)
+### Usage the client(example)
 	import (
 		"fmt"
 		"github.com/markusleevip/taodb/client"
