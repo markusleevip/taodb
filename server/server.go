@@ -53,7 +53,7 @@ func (s *Server) get(conn net.Conn, r *bufio.Reader) error{
 		return err
 	}
 	value,err:=db.Get(key)
-	log.Info("get key=%s,value=%s",key,string(value[:]))
+	log.Info("get key=%s",key)
 	return util.SendData(value,nil,conn)
 }
 
@@ -62,12 +62,12 @@ func (s *Server) set(conn net.Conn, r *bufio.Reader) error{
 	if err !=nil{
 		return err
 	}
-	log.Info("set key=%s,value=%s",key,string(value[:]))
+	log.Info("set key=%s",key)
 	err=db.Set(key,value)
 	return util.SendData([]byte(key),err,conn)
 }
 
-func (s *Server) del(conn net.Conn, r*bufio.Reader) error{
+func (s *Server) del(conn net.Conn, r *bufio.Reader) error{
 	key,err := s.readKey(r)
 	if err !=nil{
 		return err

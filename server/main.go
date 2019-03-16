@@ -2,10 +2,9 @@ package server
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/markusleevip/taodb"
 	"github.com/markusleevip/taodb/leveldb"
-	log "github.com/markusleevip/taodb/log"
+	"github.com/markusleevip/taodb/log"
 	"io"
 	"net"
 )
@@ -18,23 +17,18 @@ var (
 
 func Main() {
 	opts = parseArgs()
-
 	// init logging
 	log.LogTo(opts.logto, opts.loglevel)
-
 	db = leveldb.NewDB(opts.DBPath)
 
-	value ,_:=db.Get("test")
-	fmt.Println(string(value[:]))
-	typ,_ :=db.State("type")
-	fmt.Printf("type:%s\n",typ)
-	fmt.Println(db.State(""))
+	if state,err:=db.State(""); err==nil{
+		log.Info(state)
+	}
 	listen,err := net.Listen("tcp",opts.port)
 	if err!=nil{
 		log.Error("listen error by port:%s,error:%v",opts.port,err)
 		panic(err)
 	}
-
 	for{
 		conn,err:= listen.Accept()
 		if err!=nil{
@@ -64,6 +58,8 @@ func process(conn net.Conn){
 		if op =='S'{
 			server.set(conn,reader)
 		}else if op=='G'{
+			server.get(conn,reader)
+		}else if op=='P'{
 			server.get(conn,reader)
 		}else{
 			log.Info("close connection due to invalid operation:%v",op)

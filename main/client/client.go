@@ -17,10 +17,7 @@ func main() {
 	log.Info("port:%s",opts.port)
 	log.Info("logto:%s",opts.logto)
 	log.Info("loglevel:%s",opts.loglevel)
-	//client :=client.New(opts.ip+opts.port)
-	client :=client.New("127.0.0.1:7398")
-	//defer client.Close()
-
+	client :=client.New(opts.ip+opts.port)
 
 	for i:=0;i<100;i++ {
 		value, _ := client.Set(fmt.Sprintf("hello%d",i),[]byte(fmt.Sprintf("Hello World%d",i)))
