@@ -47,6 +47,12 @@ func (c *Client) Del(key string) ([]byte,error){
 	return c.RecvData()
 }
 
+func (c *Client) Prefix(key string) ([]byte,error){
+	kLen := len(key)
+	c.Write([]byte(fmt.Sprintf("P%d %s",kLen,key)))
+	return c.RecvData()
+}
+
 func (c *Client) RecvData() ([]byte,error){
 	vLen ,err := util.ReadLen(c.reader)
 	if err!=nil{
@@ -67,8 +73,4 @@ func (c *Client) RecvData() ([]byte,error){
 		return nil,err
 	}
 	return value,nil
-}
-
-func (c *Client) Close(){
-	c.Close()
 }

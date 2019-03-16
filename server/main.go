@@ -2,6 +2,7 @@ package server
 
 import (
 	"bufio"
+	"encoding/json"
 	"github.com/markusleevip/taodb"
 	"github.com/markusleevip/taodb/leveldb"
 	"github.com/markusleevip/taodb/log"
@@ -21,6 +22,8 @@ func Main() {
 	log.LogTo(opts.logto, opts.loglevel)
 	db = leveldb.NewDB(opts.DBPath)
 
+	data ,_:=db.Iterator("test")
+	json.Marshal(data)
 	if state,err:=db.State(""); err==nil{
 		log.Info(state)
 	}
@@ -59,8 +62,10 @@ func process(conn net.Conn){
 			server.set(conn,reader)
 		}else if op=='G'{
 			server.get(conn,reader)
+		}else if op=='D'{
+			server.del(conn,reader)
 		}else if op=='P'{
-			server.get(conn,reader)
+			server.prefix(conn,reader)
 		}else{
 			log.Info("close connection due to invalid operation:%v",op)
 		}
