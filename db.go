@@ -5,5 +5,5 @@ type DB interface{
 	Get(string) ([]byte,error)
 	Del(string) error
 	State(string)  (string, error)
-
+	Iterator(prefix string) (map[string] []byte,error)
 }

@@ -2,7 +2,9 @@ package leveldb
 
 import (
 	_leveldb "github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/iterator"
 	opt2 "github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/syndtr/goleveldb/leveldb/util"
 )
 
 const (
@@ -54,4 +56,22 @@ func (db *LevelDB) State(value string )(string, error){
 	}
 
 	return db.DB.GetProperty(value)
+}
+
+func (db *LevelDB) Iterator(prefix string) (map[string] []byte,error){
+	data :=make(map[string][]byte)
+	var iter iterator.Iterator
+	if prefix==""{
+		iter = db.DB.NewIterator(nil,nil)
+		for ok:= iter.Seek([]byte(""));ok;ok=iter.Next(){
+			data[string(iter.Key())] = iter.Value()
+		}
+	}else {
+		iter = db.DB.NewIterator(util.BytesPrefix([]byte(prefix)),nil)
+		for iter.Next(){
+			data[string(iter.Key())] = iter.Value()
+		}
+	}
+	iter.Release()
+	return data, iter.Error()
 }
