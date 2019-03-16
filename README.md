@@ -35,8 +35,8 @@ This is server and client of goleveldb
 		// iterator
 		for i:=0;i<100;i++ {
         	client.Set(fmt.Sprintf("hello%d", i), []byte(fmt.Sprintf("Hello World!%d",i)))
-        }
-        ctx,_:=client.Prefix("hello")
+        	}
+        	ctx,_:=client.Prefix("hello")
         	if len(ctx)==0{
         		log.Info("ctx is null")
         	}else{
