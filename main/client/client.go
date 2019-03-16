@@ -34,7 +34,7 @@ func main() {
 		err:=json.Unmarshal(ctx,&data)
 		log.Info("%d",len(data))
 		if err!=nil{
-			fmt.Println(err)
+			log.Error("json error:",err)
 		}
 		if len(data)>0{
 			for key,value := range  data {
