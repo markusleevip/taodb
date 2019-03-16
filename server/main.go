@@ -2,7 +2,6 @@ package server
 
 import (
 	"bufio"
-	"encoding/json"
 	"github.com/markusleevip/taodb"
 	"github.com/markusleevip/taodb/leveldb"
 	"github.com/markusleevip/taodb/log"
@@ -21,9 +20,6 @@ func Main() {
 	// init logging
 	log.LogTo(opts.logto, opts.loglevel)
 	db = leveldb.NewDB(opts.DBPath)
-
-	data ,_:=db.Iterator("test")
-	json.Marshal(data)
 	if state,err:=db.State(""); err==nil{
 		log.Info(state)
 	}

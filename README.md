@@ -38,17 +38,17 @@ This is server and client of goleveldb
         	}
         	ctx,_:=client.Prefix("hello")
         	if len(ctx)==0{
-        		log.Info("ctx is null")
+        		fmt.Println("ctx is null")
         	}else{
         		data := make(map[string] string)
         		err:=json.Unmarshal(ctx,&data)
-        		log.Info("ctx.len=%d",len(data))
+        		fmt.Printf("ctx.len=%d\n",len(data))
         		if err!=nil{
         			fmt.Println(err)
         		}
         		if len(data)>0{
         			for key,value := range  data {
-        				log.Info("pre.key=%s,%s\n",key,value)
+        				fmt.Printf("pre.key=%s,%s\n",key,value)
         			}
         		}
         	}
