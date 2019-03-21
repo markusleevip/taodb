@@ -23,13 +23,14 @@ func main() {
 
 	for i:=0;i<100;i++ {
 		value, _ := client.Get(fmt.Sprintf("hello%d",i))
-		fmt.Printf("get key:hello%d,value=%s\n",i, string(value[:]))
+		log.Info("get key:hello%d,value=%s\n",i, string(value[:]))
 	}
 
 	ctx,_:=client.Prefix("hello")
 	if len(ctx)==0{
 		log.Info("ctx is null")
 	}else{
+		fmt.Println("cit is not null")
 		data := make(map[string] string)
 		err:=json.Unmarshal(ctx,&data)
 		log.Info("%d",len(data))
@@ -42,6 +43,4 @@ func main() {
 			}
 		}
 	}
-
-
 }
