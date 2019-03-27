@@ -13,14 +13,13 @@ This is server and client of goleveldb
 
 ### Starting the server
 -----------
-	cd taodb/main/server
-	go build
-	./server -dbPath=/data/storage/taodb -port=:7398
+	cd taodb
+	./build.sh
+	./taodbd -dbPath=/data/storage/taodb -port=:7398
 ### Starting the client(test)
 -----------
-	cd taodb/main/client
-	go build
-	./client -ip=127.0.0.1 -port=:7398
+	cd taodb
+	./taodb -ip=127.0.0.1 -port=:7398
 ### Usage the client(example)
 	import (
 		"fmt"
@@ -52,5 +51,26 @@ This is server and client of goleveldb
         			}
         		}
         	}
+
+        	ctx, _ = client.PrefixOnlyKey("hello")
+            	if len(ctx) == 0 {
+            		log.Info("ctx is null")
+            	} else {
+            		data := make([]string, 0)
+            		err := json.Unmarshal(ctx, &data)
+            		if err != nil {
+            			log.Error("json error:", err)
+            			return
+            		}
+            		if len(data) > 0 {
+            			log.Info("data.len=%d", len(data))
+            			for i, key := range data {
+            				log.Info("pre.i=%d,key=%s", i, key)
+            				value, _ := client.Get(key)
+            				log.Info("getValue=%s", value[:])
+            			}
+            		}
+
+            	}
 	}
 	
