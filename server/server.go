@@ -87,12 +87,11 @@ func (s *Server) prefix(conn net.Conn, r *bufio.Reader) error {
 	}
 	value, _ := db.Iterator(key)
 	ctx, err := json.Marshal(value)
-	if err!=nil{
-		log.Error("prefix error:",err)
+	if err != nil {
+		log.Error("prefix error:", err)
 	}
 	return util.SendData(ctx, err, conn)
 }
-
 
 func (s *Server) prefixOnlyKey(conn net.Conn, r *bufio.Reader) error {
 	key, err := s.readKey(r)
@@ -101,9 +100,8 @@ func (s *Server) prefixOnlyKey(conn net.Conn, r *bufio.Reader) error {
 	}
 	value, _ := db.IteratorOnlyKey(key)
 	ctx, err := json.Marshal(value)
-	if err!=nil{
-		log.Error("prefix error:",err)
+	if err != nil {
+		log.Error("prefix error:", err)
 	}
 	return util.SendData(ctx, err, conn)
 }
-

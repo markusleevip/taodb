@@ -5,10 +5,10 @@ import (
 )
 
 type Options struct {
-	port   string
-	DBPath     string
-	logto      string
-	loglevel   string
+	port     string
+	DBPath   string
+	logto    string
+	loglevel string
 }
 
 func parseArgs() *Options {
@@ -19,9 +19,9 @@ func parseArgs() *Options {
 	flag.Parse()
 
 	return &Options{
-		port:   *port,
-		DBPath:  *DBPath,
-		logto:      *logto,
-		loglevel:   *loglevel,
+		port:     *port,
+		DBPath:   *DBPath,
+		logto:    *logto,
+		loglevel: *loglevel,
 	}
 }

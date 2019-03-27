@@ -44,31 +44,31 @@ func (db *LevelDB) Get(key string) ([]byte, error) {
 }
 
 func (db *LevelDB) Del(key string) error {
-	return db.DB.Delete([]byte(key),nil)
+	return db.DB.Delete([]byte(key), nil)
 }
 
-func (db *LevelDB) State(value string )(string, error){
-	if value==""{
+func (db *LevelDB) State(value string) (string, error) {
+	if value == "" {
 		value = "leveldb.stats"
 	}
-	if value =="type"{
-		return "leveldb",nil
+	if value == "type" {
+		return "leveldb", nil
 	}
 
 	return db.DB.GetProperty(value)
 }
 
-func (db *LevelDB) Iterator(prefix string) (map[string] string,error){
-	data :=make(map[string] string)
+func (db *LevelDB) Iterator(prefix string) (map[string]string, error) {
+	data := make(map[string]string)
 	var iter iterator.Iterator
-	if prefix==""{
-		iter = db.DB.NewIterator(nil,nil)
-		for ok:= iter.Seek([]byte(""));ok;ok=iter.Next(){
+	if prefix == "" {
+		iter = db.DB.NewIterator(nil, nil)
+		for ok := iter.Seek([]byte("")); ok; ok = iter.Next() {
 			data[string(iter.Key())] = string(iter.Value()[:])
 		}
-	}else {
-		iter = db.DB.NewIterator(util.BytesPrefix([]byte(prefix)),nil)
-		for iter.Next(){
+	} else {
+		iter = db.DB.NewIterator(util.BytesPrefix([]byte(prefix)), nil)
+		for iter.Next() {
 			data[string(iter.Key())] = string(iter.Value()[:])
 		}
 	}
@@ -76,20 +76,20 @@ func (db *LevelDB) Iterator(prefix string) (map[string] string,error){
 	return data, iter.Error()
 }
 
-func (db *LevelDB) IteratorOnlyKey(prefix string) ([]string,error) {
+func (db *LevelDB) IteratorOnlyKey(prefix string) ([]string, error) {
 	data := make([]string, 0)
 	var iter iterator.Iterator
 	if prefix == "" {
 		iter = db.DB.NewIterator(nil, nil)
 		for ok := iter.Seek([]byte("")); ok; ok = iter.Next() {
-			data = append(data,string(iter.Key()))
+			data = append(data, string(iter.Key()))
 		}
 	} else {
 		iter = db.DB.NewIterator(util.BytesPrefix([]byte(prefix)), nil)
 		for iter.Next() {
-			data = append(data,string(iter.Key()))
+			data = append(data, string(iter.Key()))
 		}
 	}
 	iter.Release()
-	return data,iter.Error()
+	return data, iter.Error()
 }
