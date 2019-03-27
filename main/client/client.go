@@ -33,7 +33,6 @@ func main() {
 		fmt.Println("cit is not null")
 		data := make(map[string] string)
 		err:=json.Unmarshal(ctx,&data)
-		log.Info("%d",len(data))
 		if err!=nil{
 			log.Error("json error:",err)
 		}
@@ -43,4 +42,25 @@ func main() {
 			}
 		}
 	}
+	ctx,_ = client.PrefixOnlyKey("hello")
+	if len(ctx) ==0{
+		log.Info("ctx is null")
+	}else{
+		data := make([]string,0)
+		err := json.Unmarshal(ctx,&data)
+		if err!=nil{
+			log.Error("json error:",err)
+			return
+		}
+		if len(data)>0{
+			log.Info("data.len=%d",len(data))
+			for i,key :=range data{
+				log.Info("pre.i=%d,key=%s",i,key)
+				value ,_:=client.Get(key)
+				log.Info("getValue=%s",value[:])
+			}
+		}
+
+	}
+
 }

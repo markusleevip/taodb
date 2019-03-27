@@ -75,3 +75,21 @@ func (db *LevelDB) Iterator(prefix string) (map[string] string,error){
 	iter.Release()
 	return data, iter.Error()
 }
+
+func (db *LevelDB) IteratorOnlyKey(prefix string) ([]string,error) {
+	data := make([]string, 0)
+	var iter iterator.Iterator
+	if prefix == "" {
+		iter = db.DB.NewIterator(nil, nil)
+		for ok := iter.Seek([]byte("")); ok; ok = iter.Next() {
+			data = append(data,string(iter.Key()))
+		}
+	} else {
+		iter = db.DB.NewIterator(util.BytesPrefix([]byte(prefix)), nil)
+		for iter.Next() {
+			data = append(data,string(iter.Key()))
+		}
+	}
+	iter.Release()
+	return data,iter.Error()
+}

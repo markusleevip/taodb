@@ -62,6 +62,8 @@ func process(conn net.Conn){
 			server.del(conn,reader)
 		}else if op=='P'{
 			server.prefix(conn,reader)
+		}else if op=='K'{
+			server.prefixOnlyKey(conn,reader)
 		}else{
 			log.Info("close connection due to invalid operation:%v",op)
 		}

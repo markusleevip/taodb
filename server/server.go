@@ -87,10 +87,23 @@ func (s *Server) prefix(conn net.Conn, r *bufio.Reader) error {
 	}
 	value, _ := db.Iterator(key)
 	ctx, err := json.Marshal(value)
-	valueMap := make(map[string] string)
-	err=json.Unmarshal(ctx,&valueMap)
 	if err!=nil{
 		log.Error("prefix error:",err)
 	}
 	return util.SendData(ctx, err, conn)
 }
+
+
+func (s *Server) prefixOnlyKey(conn net.Conn, r *bufio.Reader) error {
+	key, err := s.readKey(r)
+	if err != nil {
+		return err
+	}
+	value, _ := db.IteratorOnlyKey(key)
+	ctx, err := json.Marshal(value)
+	if err!=nil{
+		log.Error("prefix error:",err)
+	}
+	return util.SendData(ctx, err, conn)
+}
+

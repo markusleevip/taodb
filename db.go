@@ -6,4 +6,5 @@ type DB interface{
 	Del(string) error
 	State(string)  (string, error)
 	Iterator(prefix string) (map[string] string,error)
+	IteratorOnlyKey(prefix string) ([]string,error)
 }
