@@ -36,15 +36,16 @@ func main() {
 
 	cn.WriteCmdString("PING")
 	cn.WriteCmdString("ECHO", "HEllO")
-	cn.WriteCmd("SET", []byte("hello"), []byte("Hello 世界 哈哈"))
-	cn.WriteCmdString("GET", "key")
+	cn.WriteCmd("SET", []byte("hello"), []byte("Hello 世界"))
+	cn.WriteCmdString("GET", "hello")
+	cn.WriteCmdString("ITERATOR", "hello")
 	if err := cn.Flush(); err != nil {
 		cn.MarkFailed()
 		panic(err)
 	}
 
 	// Consume responses
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 5; i++ {
 		t, err := cn.PeekType()
 		if err != nil {
 			return

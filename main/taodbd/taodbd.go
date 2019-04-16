@@ -32,6 +32,8 @@ func run() error {
 	srv.Handle("info", taodb.Info(srv))
 	srv.Handle("get", taodb.Get(srv))
 	srv.Handle("set", taodb.Set(srv))
+	srv.Handle("del",taodb.Del(srv))
+	srv.Handle("iterator",taodb.Iterator(srv))
 
 	lis, err := net.Listen("tcp", flags.addr)
 	if err != nil {

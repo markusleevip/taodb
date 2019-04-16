@@ -1,6 +1,7 @@
 package taodb
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/markusleevip/taodb/resp"
 	"strings"
@@ -31,6 +32,9 @@ func NotFound(key string) string {
 }
 func ErrNotFound(key string) error {
 	return errors.New(NotFound(key))
+}
+func WrongData(cmd string )string{
+	return "ERR wrong data command : '" + cmd + "'"
 }
 
 // Ping returns a ping handler.
@@ -76,10 +80,6 @@ func Info(s *Server) Handler {
 	})
 }
 
-
-
-// Echo returns an echo handler.
-// https://redis.io/commands/echo
 func Get(s *Server) Handler {
 	return HandlerFunc(func(w resp.ResponseWriter, c *resp.Command) {
 		switch c.ArgN() {
@@ -89,6 +89,23 @@ func Get(s *Server) Handler {
 				w.AppendError(NotFound(string(c.Arg(0))))
 			}else {
 				w.AppendBulk(value)
+			}
+		default:
+			w.AppendError(WrongNumberOfArgs(c.Name))
+		}
+	})
+}
+
+
+func Del(s *Server) Handler {
+	return HandlerFunc(func(w resp.ResponseWriter, c *resp.Command) {
+		switch c.ArgN() {
+		case 1:
+			err :=(*s.db).Del(string(c.Arg(0)))
+			if err!=nil{
+				w.AppendError(NotFound(string(c.Arg(0))))
+			}else {
+				w.AppendBulk([]byte("ok"))
 			}
 		default:
 			w.AppendError(WrongNumberOfArgs(c.Name))
@@ -109,6 +126,25 @@ func Set(s *Server) Handler{
 			}
 		default:
 			w.AppendError(WrongNumberOfArgs(c.Name))
+		}
+	})
+}
+
+func Iterator(s *Server) Handler{
+	return HandlerFunc(func(w resp.ResponseWriter, c *resp.Command){
+		switch  c.ArgN() {
+		case 1:
+			value,err :=(*s.db).Iterator(string(c.Arg(0)))
+			if err !=nil{
+				w.AppendError(NotFound(c.Name+" "+string(c.Arg(0))))
+			}else{
+				ctx, err := json.Marshal(value)
+				if err != nil {
+					w.AppendError(WrongData(c.Name+" "+string(c.Arg(0))))
+				}
+				w.AppendBulk(ctx)
+
+			}
 		}
 	})
 }
