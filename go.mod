@@ -10,5 +10,7 @@ replace (
 
 require (
 	github.com/alecthomas/log4go v0.0.0-20180109082532-d146e6b86faa
+	github.com/onsi/ginkgo v1.7.0
+	github.com/onsi/gomega v1.4.3
 	github.com/syndtr/goleveldb v1.0.0
 )

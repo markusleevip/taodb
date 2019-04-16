@@ -10,6 +10,7 @@ import (
 )
 
 type Server struct {
+
 }
 
 func (s *Server) readKey(r *bufio.Reader) (string, error) {
