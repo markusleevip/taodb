@@ -1,7 +1,7 @@
 # TaoDB
 This is server and client of goleveldb
+## Notice
 Also use Redis client to connect to the server.
-## Dependencies
 
 ### Install TaoDB
 -----------
