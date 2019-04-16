@@ -16,14 +16,7 @@ type Client struct {
 	reader *bufio.Reader
 }
 
-func New(addr string) *Client {
-	conn, err := net.Dial("tcp", addr)
-	if err != nil {
-		panic(err)
-	}
-	return &Client{conn, bufio.NewReader(conn)}
 
-}
 func (c *Client) Get(key string) ([]byte, error) {
 	kLen := len(key)
 	c.Write([]byte(fmt.Sprintf("G%d %s", kLen, key)))
