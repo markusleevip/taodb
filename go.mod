@@ -14,3 +14,5 @@ require (
 	github.com/onsi/gomega v1.4.3
 	github.com/syndtr/goleveldb v1.0.0
 )
+
+go 1.12

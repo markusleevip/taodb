@@ -3,25 +3,29 @@ package main
 import (
 	"flag"
 	"github.com/markusleevip/taodb"
-	"log"
+	"github.com/markusleevip/taodb/log"
 	"net"
 )
 
 var flags struct {
-	addr, DBPath string
+	addr, DBPath,logto, loglevel string
 }
 
 func init() {
 	flag.StringVar(&flags.addr, "addr", ":7398", "The TCP address to bind to")
 	flag.StringVar(&flags.DBPath, "dbPath", "/data/storage/taodb", "db save path")
+	flag.StringVar(&flags.logto,"log", "stdout", "Write log messages to this file. 'stdout' and 'none' have special meanings")
+	flag.StringVar(&flags.loglevel,"log-level", "DEBUG", "The level of messages to log. One of: DEBUG, INFO, WARNING, ERROR")
 }
 
 func main() {
 
 	flag.Parse()
 
+	log.LogTo(flags.logto, flags.loglevel)
 	if err := run(); err != nil {
-		log.Fatalln(err)
+		log.Error("start error.",err)
+		panic(err)
 	}
 }
 
@@ -41,7 +45,7 @@ func run() error {
 	}
 	defer lis.Close()
 
-	log.Printf("waiting for connections on %s", lis.Addr().String())
+	log.Info("waiting for connections on %s", lis.Addr().String())
 
 	return srv.Serve(lis)
 }
